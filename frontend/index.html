@@ -1,34 +1,49 @@
-const express = require('express');
-const cors = require('cors'); // Necesario para permitir solicitudes desde el frontend
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conexión Básica Backend</title>
+    <!-- Carga de Tailwind CSS para estilos mínimos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+    <div class="bg-white p-8 rounded-lg shadow-md text-center">
+        <h1 class="text-2xl font-bold mb-4">Probar Conexión con Backend</h1>
+        <p class="text-gray-600 mb-6">Haz clic para cargar datos desde tu backend en <code class="bg-gray-200 p-1 rounded">http://localhost:5050/api/publicaciones</code></p>
+        <button id="fetchDataBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+            Cargar Datos
+        </button>
+        <div id="dataContainer" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md text-left text-sm text-gray-800 whitespace-pre-wrap">
+            <!-- Los datos del backend se mostrarán aquí -->
+            Esperando datos...
+        </div>
+    </div>
 
-const app = express();
-// Usa process.env.PORT para que entornos en la nube (como Codespaces) asignen el puerto dinámicamente.
-// Si no hay variable de entorno (ej. ejecutando localmente sin configuración específica), usará 5050.
-const PORT = process.env.PORT || 5050;
+    <script>
+        // URL de tu backend. Asegúrate de que tu backend esté corriendo en este puerto.
+        const API_URL = 'http://localhost:5050/api/publicaciones';
 
-app.use(cors()); // Habilita CORS para permitir que tu frontend (en otro puerto/dominio) se conecte
-app.use(express.json()); // Middleware para parsear el cuerpo de las solicitudes JSON (si envías datos)
+        // Función para cargar datos desde el backend
+        async function fetchData() {
+            const dataContainer = document.getElementById('dataContainer');
+            dataContainer.textContent = 'Cargando...'; // Mensaje de carga
 
-// Datos en memoria para simular una base de datos.
-// Estos datos se reinician cada vez que el servidor se reinicia.
-let publicaciones = [
-  { id: 1, titulo: 'Primera publicación', descripcion: 'Contenido de la primera publicación desde el backend' },
-  { id: 2, titulo: 'Segunda publicación', descripcion: 'Contenido de la segunda publicación desde el backend' },
-];
+            try {
+                const response = await fetch(API_URL); // Realiza la solicitud GET
+                if (!response.ok) { // Verifica si la respuesta HTTP fue exitosa (código 200)
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json(); // Parsea la respuesta como JSON
+                dataContainer.textContent = JSON.stringify(data, null, 2); // Muestra los datos en formato legible
+            } catch (error) {
+                console.error('Error al cargar datos:', error);
+                dataContainer.textContent = `Error: ${error.message}. Asegúrate de que tu backend esté corriendo en ${API_URL}`;
+            }
+        }
 
-// Ruta Raíz (GET /)
-// Propósito: Para verificar rápidamente que el servidor está activo y respondiendo.
-app.get('/', (req, res) => {
-  res.send('Backend de HabitaZona funcionando correctamente!');
-});
-
-// Ruta para obtener todas las publicaciones (GET /api/publicaciones)
-// Propósito: Devolver la lista completa de publicaciones disponibles.
-app.get('/api/publicaciones', (req, res) => {
-  res.json(publicaciones);
-});
-
-// El servidor empieza a escuchar en el puerto definido
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+        // Asigna la función fetchData al evento click del botón
+        document.getElementById('fetchDataBtn').addEventListener('click', fetchData);
+    </script>
+</body>
+</html>
