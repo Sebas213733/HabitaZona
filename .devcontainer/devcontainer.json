@@ -4,9 +4,18 @@
   // 'latest' usará la versión más reciente de Node.js.
   "image": "mcr.microsoft.com/devcontainers/javascript-node:latest",
 
+  // Define el directorio de trabajo dentro del Codespace.
+  // Asegúrate de que coincida con el nombre de tu repositorio.
+  "workspaceFolder": "/workspaces/HabitaZona",
+
   // Comandos que se ejecutarán una vez que el Codespace esté listo.
   // Esto instalará las dependencias de tu backend.
   "postCreateCommand": "cd backend && npm install",
+
+  // Tarea para iniciar tu servidor backend automáticamente.
+  // Se ejecutará cada vez que el Codespace se inicie.
+  // Se ha eliminado 'remoteUser' para evitar conflictos de permisos.
+  "onCreateCommand": "cd backend && npm start",
 
   // Define los puertos que tu aplicación expone.
   // Tu backend de Node.js usa el puerto 5050.
@@ -25,11 +34,5 @@
         "esbenp.prettier-vscode" // Para formateo de código
       ]
     }
-  },
-
-  // Tarea para iniciar tu servidor backend automáticamente.
-  // Se ejecutará cada vez que el Codespace se inicie.
-  "remoteUser": "node", // Ejecuta los comandos como el usuario 'node'
-  "workspaceFolder": "/workspaces/HabitaZona", // Asegura que el espacio de trabajo apunte a la raíz
-  "onCreateCommand": "cd backend && npm start" // Inicia el servidor usando el script 'start'
+  }
 }
