@@ -12,7 +12,7 @@ app.use(express.json()); // Middleware para parsear el cuerpo de las solicitudes
 // Datos en memoria para simular una base de datos.
 // Estos datos se reinician cada vez que el servidor se reinicia.
 let publicaciones = [
-  { id: 1, titulo: 'Primera publicación', descripcion: 'Contenido de la primera publicación desde el backend' },
+  { id: 1, titulo: 'Primera publicaciónaaaa', descripcion: 'Contenido de la primera publicación desde el backend' },
   { id: 2, titulo: 'Segunda publicación', descripcion: 'Contenido de la segunda publicación desde el backend' },
 ];
 
